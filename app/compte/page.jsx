@@ -7,7 +7,7 @@ import { useApp } from '../../components/Providers';
 import AuthForm from '../../components/AuthForm';
 import ListingCard, { priceLabel } from '../../components/ListingCard';
 
-const SEL = 'id,title,status,transaction,price_dt,price_on_request,rent_period,surface_total_m2,rooms,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),owner:profiles(verified),listing_photos(storage_path,position)';
+const SEL = 'id,title,status,transaction,price_dt,price_on_request,rent_period,surface_total_m2,rooms,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),owner:profiles!listings_owner_id_fkey(verified),listing_photos(storage_path,position)';
 
 export default function Compte() {
   const { t, say } = useApp();

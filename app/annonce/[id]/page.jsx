@@ -20,7 +20,7 @@ export default function Annonce() {
   useEffect(() => {
     supabase
       .from('listings')
-      .select('*,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),neighborhood:neighborhoods(name_fr,name_ar),owner:profiles(display_name,advertiser,phone,whatsapp,agency_name,verified),listing_photos(storage_path,position)')
+      .select('*,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),neighborhood:neighborhoods(name_fr,name_ar),owner:profiles!listings_owner_id_fkey(display_name,advertiser,phone,whatsapp,agency_name,verified),listing_photos(storage_path,position)')
       .eq('id', id)
       .maybeSingle()
       .then(({ data }) => setL(data || null));

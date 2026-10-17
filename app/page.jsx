@@ -39,7 +39,7 @@ export default function Home() {
     setRows(null);
     let q = supabase
       .from('listings')
-      .select('id,title,transaction,property,price_dt,price_on_request,rent_period,surface_total_m2,rooms,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),owner:profiles(verified),listing_photos(storage_path,position)')
+      .select('id,title,transaction,property,price_dt,price_on_request,rent_period,surface_total_m2,rooms,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),owner:profiles!listings_owner_id_fkey(verified),listing_photos(storage_path,position)')
       .eq('status', 'publiee')
       .eq('transaction', TX_MAP[tx])
       .order('published_at', { ascending: false })
