@@ -13,6 +13,7 @@ export default function Compte() {
   const { t, say } = useApp();
   const session = useSession();
   const [p, setP] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [phone, setPhone] = useState('');
   const [adv, setAdv] = useState('particulier');
   const [mine, setMine] = useState([]);
@@ -22,11 +23,12 @@ export default function Compte() {
     if (!session) return;
     const uid = session.user.id;
     const [a, b, c] = await Promise.all([
-      supabase.from('profiles').select('phone,whatsapp,advertiser').eq('id', uid).maybeSingle(),
+      supabase.from('profiles').select('phone,whatsapp,advertiser,is_admin').eq('id', uid).maybeSingle(),
       supabase.from('listings').select(SEL).eq('owner_id', uid).order('created_at', { ascending: false }),
       supabase.from('favorites').select('listing:listings(' + SEL + ')').eq('user_id', uid),
     ]);
     setP(a.data || {});
+    setIsAdmin(!!a.data?.is_admin);
     setPhone((a.data?.phone || '').replace('+216', ''));
     setAdv(a.data?.advertiser || 'particulier');
     setMine(b.data || []);
@@ -68,6 +70,8 @@ export default function Compte() {
           <button className="btn" onClick={() => supabase.auth.signOut()}>{t('logout')}</button>
         </div>
       </div>
+
+      {isAdmin && <Link href="/admin" className="btn sea" style={{ display: 'block', textAlign: 'center', marginTop: 14 }}>Administration</Link>}
 
       <h2 style={{ marginTop: 22 }}>{t('myListings')}</h2>
       {mine.length === 0 && <p className="cmeta">{t('none')} — <Link href="/publier" className="link">{t('nav_publish')}</Link></p>}

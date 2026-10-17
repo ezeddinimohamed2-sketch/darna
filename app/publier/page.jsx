@@ -135,14 +135,16 @@ export default function Publier() {
     }
     const id = data.id;
     const rowsPh = [];
+    let upErr = '';
     for (let n = 0; n < d.photos.length; n++) {
       const path = `${uid}/${id}/${n}.jpg`;
       const { error: e2 } = await supabase.storage.from('listing-photos').upload(path, d.photos[n].blob, { contentType: 'image/jpeg', upsert: true });
       if (!e2) rowsPh.push({ listing_id: id, storage_path: path, position: n });
+      else upErr = e2.message;
     }
     if (rowsPh.length) await supabase.from('listing_photos').insert(rowsPh);
     try { sessionStorage.removeItem('darna-draft'); } catch (e) {}
-    say(t('pubOk'));
+    say(upErr ? `${t('pubOk')} (photos : ${upErr})` : t('pubOk'));
     router.push(`/annonce/${id}`);
   };
 
