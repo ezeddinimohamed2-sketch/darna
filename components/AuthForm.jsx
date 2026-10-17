@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useApp } from './Providers';
 
 export default function AuthForm() {
-  const { t } = useApp();
+  const { t, lang } = useApp();
   const [mode, setMode] = useState('login');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -26,6 +26,14 @@ export default function AuthForm() {
     setBusy(false);
   };
 
+  const forgot = async () => {
+    if (!email) return setMsg(lang === 'ar' ? 'أدخل بريدك الإلكتروني أولا' : 'Entrez d\u2019abord votre e-mail');
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/reset` });
+    setMsg(error ? error.message : lang === 'ar' ? 'تم إرسال رابط إعادة التعيين إلى بريدك' : 'Lien envoy\u00e9 : v\u00e9rifiez votre e-mail (et les spams).');
+    setBusy(false);
+  };
+
   return (
     <form onSubmit={go} className="auth">
       <input type="email" required placeholder={t('email')} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
@@ -35,6 +43,11 @@ export default function AuthForm() {
       <button type="button" className="link" onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}>
         {mode === 'login' ? `${t('noAcc')} ${t('signup')}` : t('haveAcc')}
       </button>
+      {mode === 'login' && (
+        <button type="button" className="link" onClick={forgot} disabled={busy}>
+          {lang === 'ar' ? 'نسيت كلمة المرور؟' : 'Mot de passe oubli\u00e9 ?'}
+        </button>
+      )}
     </form>
   );
 }

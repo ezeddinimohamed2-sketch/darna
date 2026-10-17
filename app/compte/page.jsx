@@ -10,7 +10,8 @@ import ListingCard, { priceLabel } from '../../components/ListingCard';
 const SEL = 'id,title,status,transaction,price_dt,price_on_request,rent_period,surface_total_m2,rooms,governorate:governorates(name_fr,name_ar),delegation:delegations(name_fr,name_ar),owner:profiles!listings_owner_id_fkey(verified),listing_photos(storage_path,position)';
 
 export default function Compte() {
-  const { t, say } = useApp();
+  const { t, say, lang } = useApp();
+  const [newPw, setNewPw] = useState('');
   const session = useSession();
   const [p, setP] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -45,6 +46,12 @@ export default function Compte() {
     const { error } = await supabase.from('profiles').update({ phone: full, whatsapp: full, advertiser: adv }).eq('id', session.user.id);
     say(error ? error.message : t('saved'));
   };
+  const changePw = async () => {
+    if (newPw.length < 6) return say(lang === 'ar' ? '6 أحرف على الأقل' : '6 caract\u00e8res minimum');
+    const { error } = await supabase.auth.updateUser({ password: newPw });
+    if (!error) setNewPw('');
+    say(error ? error.message : lang === 'ar' ? 'تم تغيير كلمة المرور' : 'Mot de passe modifi\u00e9');
+  };
   const setStatus = async (id, status) => { await supabase.from('listings').update({ status }).eq('id', id); load(); };
   const del = async (id) => {
     if (!confirm(t('confirmDel'))) return;
@@ -64,6 +71,11 @@ export default function Compte() {
           {['particulier', 'agence', 'promoteur'].map((k) => (
             <button key={k} className={'chip' + (adv === k ? ' on' : '')} onClick={() => setAdv(k)}>{t(k)}</button>
           ))}
+        </div>
+        <span className="lbl">{lang === 'ar' ? 'تغيير كلمة المرور' : 'Changer le mot de passe'}</span>
+        <div className="row" style={{ marginTop: 0 }}>
+          <input type="password" style={{ flex: 1 }} autoComplete="new-password" placeholder={lang === 'ar' ? 'كلمة مرور جديدة' : 'Nouveau mot de passe'} value={newPw} onChange={(e) => setNewPw(e.target.value)} />
+          <button className="btn" onClick={changePw}>OK</button>
         </div>
         <div className="row">
           <button className="btn sea" onClick={save}>{t('save')}</button>
