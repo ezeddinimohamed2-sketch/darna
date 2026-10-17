@@ -4,7 +4,8 @@ import { useParams } from 'next/navigation';
 import { supabase, photoUrl } from '../../../lib/supabase';
 import { useSession } from '../../../lib/useSession';
 import { useApp } from '../../../components/Providers';
-import { priceLabel } from '../../../components/ListingCard';
+import { priceLabel, ago } from '../../../components/ListingCard';
+import Icon from '../../../components/Icons';
 import { nm, fmt, DEED_KEY } from '../../../lib/data';
 
 const REASONS = ['arnaque', 'doublon', 'mauvaise_categorie', 'prix_faux', 'deja_vendu', 'autre'];
@@ -31,8 +32,8 @@ export default function Annonce() {
     supabase.from('favorites').select('listing_id').eq('listing_id', id).eq('user_id', session.user.id).maybeSingle().then(({ data }) => setFav(!!data));
   }, [session, id]);
 
-  if (l === undefined) return <p>{t('loading')}</p>;
-  if (l === null) return <p>{t('notFound')}</p>;
+  if (l === undefined) return <p className="box" style={{ padding: 16 }}>{t('loading')}</p>;
+  if (l === null) return <p className="box" style={{ padding: 16 }}>{t('notFound')}</p>;
 
   const photos = [...(l.listing_photos || [])].sort((a, b) => a.position - b.position);
   const place = [nm(l.neighborhood, lang), nm(l.delegation, lang), nm(l.governorate, lang)].filter(Boolean).join(', ');
@@ -69,39 +70,56 @@ export default function Annonce() {
     l.title_deed && DEED_KEY[l.title_deed] && `${t('deed')} : ${t('d_' + DEED_KEY[l.title_deed])}`,
   ].filter(Boolean);
 
+  const name = o.agency_name || o.display_name || t('seller');
   return (
     <>
-      {photos.length > 0 && (
-        <div className="gal">{photos.map((p) => <img key={p.storage_path} src={photoUrl(p.storage_path)} alt="" />)}</div>
-      )}
-      <div className="cprice" style={{ fontSize: '1.5rem' }}>{priceLabel(l, t)}</div>
-      <h1>{l.title}</h1>
-      <p className="cplace">📍 {place}</p>
-      <div className="facts">{facts.map((f) => <span className="fact" key={f}>{f}</span>)}</div>
-      {l.description && <p style={{ whiteSpace: 'pre-line' }}>{l.description}</p>}
-
-      <div className="mine">
-        <b>{o.agency_name || o.display_name || t('seller')}</b>{' '}
-        <span className="pill">{t(o.advertiser || 'particulier')}</span>{' '}
-        {o.verified && <span className="pill" style={{ background: 'var(--ok)', color: '#fff' }}>✓ {t('verified')}</span>}
-        <div className="cta">
-          {o.phone && <a className="btn sea" href={`tel:${o.phone}`}>📞 {t('call')}</a>}
-          {wa && <a className="btn" href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer">💬 {t('whatsapp')}</a>}
+      <article className="post">
+        <div className="phead">
+          <div className="av">{(name || '?').trim().charAt(0).toUpperCase()}</div>
+          <div style={{ minWidth: 0 }}>
+            <div className="pname">
+              <span>{name}</span>
+              {o.verified && <i className="vtick" title={t('verified')}><Icon n="check" size={11} sw={3.5} /></i>}
+            </div>
+            <div className="psub">
+              {t(o.advertiser || 'particulier')} · {ago(l.published_at, lang)}
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="row">
-        <button className="btn" onClick={toggleFav}>{fav ? '❤️' : '🤍'} {t('fav')}</button>
-        <button className="btn" onClick={share}>↗ {t('share')}</button>
-        <button className="btn" onClick={() => setRep(!rep)}>⚑ {t('report')}</button>
-      </div>
-      {rep && (
-        <>
-          <span className="lbl">{t('reportWhy')}</span>
-          <div className="chips">{REASONS.map((r) => <button key={r} className="chip" onClick={() => report(r)}>{t('r_' + r)}</button>)}</div>
-        </>
+        {photos.length > 0 && (
+          <div className="gal">{photos.map((p) => <img key={p.storage_path} src={photoUrl(p.storage_path)} alt="" />)}</div>
+        )}
+
+        <div className="pbody">
+          <div className="cprice" style={{ fontSize: '1.5rem' }}>{priceLabel(l, t)}</div>
+          <h1>{l.title}</h1>
+          <div className="cmeta" style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Icon n="pin" size={16} /> {place}</div>
+          <div className="facts">{facts.map((f) => <span className="fact" key={f}>{f}</span>)}</div>
+          {l.description && <p style={{ whiteSpace: 'pre-line', marginTop: 0 }}>{l.description}</p>}
+        </div>
+
+        <div className="pacts">
+          <button className={'pact' + (fav ? ' on' : '')} onClick={toggleFav}><Icon n="heart" size={20} fill={fav} /> {t('fav')}</button>
+          <button className="pact" onClick={share}><Icon n="share" size={20} /> {t('share')}</button>
+          <button className="pact" onClick={() => setRep(!rep)}><Icon n="flag" size={20} /> {t('report')}</button>
+        </div>
+        {rep && (
+          <div style={{ padding: '0 16px 14px' }}>
+            <span className="lbl">{t('reportWhy')}</span>
+            <div className="chips">{REASONS.map((r) => <button key={r} className="chip" onClick={() => report(r)}>{t('r_' + r)}</button>)}</div>
+          </div>
+        )}
+      </article>
+
+      {(o.phone || wa) && (
+        <div className="mine">
+          <div className="cta" style={{ margin: 0 }}>
+            {o.phone && <a className="btn sea" href={`tel:${o.phone}`}><Icon n="phone" size={20} /> {t('call')}</a>}
+            {wa && <a className="btn wa" href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer"><Icon n="chat" size={20} /> {t('whatsapp')}</a>}
+          </div>
+        </div>
       )}
-      <p className="cmeta" style={{ marginTop: 16 }}>{t('publishedOn')} {l.published_at ? new Date(l.published_at).toLocaleDateString(lang === 'ar' ? 'ar-TN' : 'fr-FR') : ''}</p>
     </>
   );
 }

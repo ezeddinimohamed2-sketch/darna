@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { T } from '../lib/i18n';
+import Icon from './Icons';
 
 const Ctx = createContext(null);
 export const useApp = () => useContext(Ctx);
@@ -37,9 +38,9 @@ export default function Providers({ children }) {
   };
 
   const nav = [
-    ['/', 'nav_search', '🔍'],
-    ['/publier', 'nav_publish', '＋'],
-    ['/compte', 'nav_account', '👤'],
+    ['/', 'nav_search', 'home'],
+    ['/publier', 'nav_publish', 'plus'],
+    ['/compte', 'nav_account', 'user'],
   ];
   const active = (h) => (h === '/' ? path === '/' : path.startsWith(h));
 
@@ -50,14 +51,15 @@ export default function Providers({ children }) {
           <img src="/icon-192.png" alt="" className="logo-img" /> {t('app')}
         </Link>
         <button className="lang" onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}>
+          <Icon n="globe" size={18} />
           {lang === 'fr' ? 'عربي' : 'FR'}
         </button>
       </header>
-      <main className="wrap">{children}</main>
+      <main className={'wrap ' + (path === '/' || path.startsWith('/annonce') ? 'feed' : 'sheet')}>{children}</main>
       <nav className="bottom">
         {nav.map(([h, k, ic]) => (
           <Link key={h} href={h} className={active(h) ? 'on' : ''}>
-            <span className="ic">{ic}</span>
+            <Icon n={ic} size={24} fill={active(h) && ic === 'home'} />
             {t(k)}
           </Link>
         ))}
