@@ -263,11 +263,12 @@ export default function Publier() {
 
       {cur === 6 && (<>
         <h2>{t('s_photos')}</h2>
-        <p className="cmeta">{t('photosHint')}</p>
+        <p className="cmeta">{t('photosHint')} {lang === 'ar' ? 'اضغط ★ لاختيار الصورة الرئيسية.' : 'Touchez ★ pour choisir la photo principale.'}</p>
         <div className="photos">
           {d.photos.map((p, n) => (
             <div className="ph" key={n}>
               <img src={p.url} alt="" />
+              {n === 0 ? <span className="mainph">★</span> : <button className="star" aria-label="Photo principale" onClick={() => set({ photos: [p, ...d.photos.filter((_, j) => j !== n)] })}>★</button>}
               <button className="x" aria-label={t('removePhoto')} onClick={() => set({ photos: d.photos.filter((_, j) => j !== n) })}>×</button>
             </div>
           ))}

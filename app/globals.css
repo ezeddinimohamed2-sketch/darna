@@ -71,3 +71,5 @@ select,input[type=text],input[type=email],input[type=password],input[type=tel],i
 .mine{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:10px}
 .pill{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:var(--line);color:var(--mut)}
 .sw{display:flex;align-items:center;gap:10px;padding:10px 0}
+.photos .star,.photos .mainph{position:absolute;bottom:4px;left:4px;border:0;border-radius:99px;min-width:26px;height:26px;padding:0 6px;font-size:.95rem;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
+.photos .mainph{background:var(--sun);color:#2a1c00;font-weight:700}
