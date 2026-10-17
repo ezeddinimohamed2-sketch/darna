@@ -3,6 +3,7 @@ import Providers from '../components/Providers';
 
 export const metadata = {
   title: 'DarNa — Annonces immobilières en Tunisie',
+  appleWebApp: { capable: true, title: 'DarNa', statusBarStyle: 'default' },
   description: "Acheter, louer, vendre un bien en Tunisie : appartements, villas, terrains. Publiez en 1 minute, sans rien taper.",
 };
 export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#0B5C7A' };
