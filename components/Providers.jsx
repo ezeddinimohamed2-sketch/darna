@@ -47,7 +47,7 @@ export default function Providers({ children }) {
     <Ctx.Provider value={{ lang, setLang, t, say }}>
       <header className="top">
         <Link href="/" className="logo">
-          <span className="logo-mark">🏠</span> {t('app')}
+          <img src="/icon-192.png" alt="" className="logo-img" /> {t('app')}
         </Link>
         <button className="lang" onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}>
           {lang === 'fr' ? 'عربي' : 'FR'}

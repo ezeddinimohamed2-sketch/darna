@@ -73,3 +73,9 @@ select,input[type=text],input[type=email],input[type=password],input[type=tel],i
 .sw{display:flex;align-items:center;gap:10px;padding:10px 0}
 .photos .star,.photos .mainph{position:absolute;bottom:4px;left:4px;border:0;border-radius:99px;min-width:26px;height:26px;padding:0 6px;font-size:.95rem;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
 .photos .mainph{background:var(--sun);color:#2a1c00;font-weight:700}
+
+.top{background:var(--card)!important;color:var(--sea)!important;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:8px;color:var(--sea)}
+.logo-img{width:36px;height:36px;border-radius:8px;display:block}
+.lang{background:var(--sea)!important;color:#fff!important}
+@media (prefers-color-scheme:dark){.logo{color:var(--ink)}}
