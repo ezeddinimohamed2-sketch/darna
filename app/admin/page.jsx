@@ -15,6 +15,7 @@ export default function Admin() {
   const [admin, setAdmin] = useState(null);
   const [reports, setReports] = useState([]);
   const [listings, setListings] = useState([]);
+  const [agents, setAgents] = useState([]);
 
   const load = useCallback(async () => {
     if (!session) return;
@@ -22,10 +23,12 @@ export default function Admin() {
     const ok = !!me.data?.is_admin;
     setAdmin(ok);
     if (!ok) return;
-    const [r, l] = await Promise.all([
+    const [r, l, ag] = await Promise.all([
       supabase.from('reports').select('id,reason,details,created_at,listing:listings(id,title,status)').order('created_at', { ascending: false }),
       supabase.from('listings').select(LSEL).order('created_at', { ascending: false }).limit(60),
+      supabase.from('profiles').select('id,display_name,agency_name,advertiser,phone,crm_enabled,crm_requested,created_at').order('crm_requested', { ascending: false }).order('created_at', { ascending: false }).limit(100),
     ]);
+    setAgents(ag.data || []);
     setReports(r.data || []);
     setListings(l.data || []);
   }, [session]);
@@ -48,9 +51,31 @@ export default function Admin() {
     load();
   };
 
+  const setCrm = async (uid, val) => {
+    const { error } = await supabase.rpc('admin_set_crm', { target: uid, val });
+    say(error ? error.message : val ? 'CRM activé' : 'CRM désactivé');
+    load();
+  };
+
   return (
     <>
-      <h2>Signalements ({reports.length})</h2>
+      <h2>Accès DarNa Pro (CRM) — {agents.filter((a) => a.crm_requested).length} demande(s)</h2>
+      {agents.map((a) => (
+        <div className="mine" key={a.id}>
+          <b>{a.agency_name || a.display_name || 'Sans nom'}</b>{' '}
+          <span className="pill">{a.advertiser}</span>{' '}
+          {a.crm_enabled && <span className="pill" style={{ background: 'var(--ok)', color: '#fff' }}>CRM actif</span>}
+          {a.crm_requested && !a.crm_enabled && <span className="pill" style={{ background: 'var(--sun)', color: '#2a1c00' }}>Demande en attente</span>}
+          <div className="cmeta">{a.phone || 'Pas de téléphone'}</div>
+          <div className="row">
+            {a.crm_enabled
+              ? <button className="btn danger" onClick={() => setCrm(a.id, false)}>Désactiver le CRM</button>
+              : <button className="btn sea" onClick={() => setCrm(a.id, true)}>Activer le CRM</button>}
+          </div>
+        </div>
+      ))}
+
+      <h2 style={{ marginTop: 22 }}>Signalements ({reports.length})</h2>
       {reports.length === 0 && <p className="cmeta">Aucun signalement.</p>}
       {reports.map((r) => (
         <div className="mine" key={r.id}>

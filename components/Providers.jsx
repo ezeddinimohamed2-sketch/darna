@@ -40,6 +40,7 @@ export default function Providers({ children }) {
   const nav = [
     ['/', 'nav_search', 'home'],
     ['/publier', 'nav_publish', 'plus'],
+    ['/crm', 'nav_pro', 'briefcase'],
     ['/compte', 'nav_account', 'user'],
   ];
   const active = (h) => (h === '/' ? path === '/' : path.startsWith(h));
@@ -55,7 +56,7 @@ export default function Providers({ children }) {
           {lang === 'fr' ? 'عربي' : 'FR'}
         </button>
       </header>
-      <main className={'wrap ' + (path === '/' || path.startsWith('/annonce') ? 'feed' : 'sheet')}>{children}</main>
+      <main className={'wrap ' + (path === '/' || path.startsWith('/annonce') ? 'feed' : path.startsWith('/crm') ? 'feed crm' : 'sheet')}>{children}</main>
       <nav className="bottom">
         {nav.map(([h, k, ic]) => (
           <Link key={h} href={h} className={active(h) ? 'on' : ''}>

@@ -107,6 +107,7 @@ export default function Publier() {
     const uid = session.user.id;
     const row = {
       owner_id: uid,
+      published_at: new Date().toISOString(),
       transaction: TX_MAP[d.tx],
       property: d.type,
       title: title.length >= 10 ? title : title.padEnd(10, '.'),
