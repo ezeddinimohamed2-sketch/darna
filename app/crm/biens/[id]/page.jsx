@@ -8,6 +8,7 @@ import { useCrm } from '../../../../components/crm/CrmContext';
 import Icon from '../../../../components/Icons';
 import { Empty, Pill } from '../../../../components/crm/ui';
 import { PropertyForm, VisitForm, DealForm } from '../../../../components/crm/forms';
+import SharePanel from '../../../../components/crm/SharePanel';
 import Timeline from '../../../../components/crm/Timeline';
 import Tasks from '../../../../components/crm/Tasks';
 import {
@@ -20,7 +21,7 @@ export default function BienDetail() {
   const { id } = useParams();
   const router = useRouter();
   const { say } = useApp();
-  const { uid } = useCrm();
+  const { uid, prof } = useCrm();
   const fileRef = useRef();
   const [p, setP] = useState(undefined);
   const [photos, setPhotos] = useState([]);
@@ -153,6 +154,10 @@ export default function BienDetail() {
           {p.listing_id && <button className="btn" onClick={withdraw}>Retirer de DarNa</button>}
         </div>
       </section>
+
+      {p.listing_id && ACTIVE_BIEN.includes(p.status) && (
+        <SharePanel p={p} place={place} photos={photos} phone={prof?.phone || ''} />
+      )}
 
       <section className="panel">
         <div className="hrow">

@@ -1,7 +1,11 @@
 import './globals.css';
 import Providers from '../components/Providers';
 
+import { SITE_URL } from '../lib/site';
+
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
+  openGraph: { type: 'website', siteName: 'DarNa', title: 'DarNa — Annonces immobilières en Tunisie', description: 'Acheter, louer, vendre un bien en Tunisie.', images: [{ url: '/logo.png' }], locale: 'fr_TN' },
   title: 'DarNa — Annonces immobilières en Tunisie',
   appleWebApp: { capable: true, title: 'DarNa', statusBarStyle: 'default' },
   description: "Acheter, louer, vendre un bien en Tunisie : appartements, villas, terrains. Publiez en 1 minute, sans rien taper.",

@@ -15,6 +15,7 @@ const TABS = [
   ['/crm/demandes', 'Demandes'],
   ['/crm/visites', 'Visites'],
   ['/crm/affaires', 'Affaires'],
+  ['/crm/reseaux', 'Réseaux'],
 ];
 
 export default function CrmLayout({ children }) {
