@@ -83,6 +83,7 @@ export default function Compte() {
         </div>
       </div>
 
+      <Link href="/crm" className="btn" style={{ display: 'block', textAlign: 'center', marginTop: 14 }}>DarNa Pro — espace agents immobiliers</Link>
       {isAdmin && <Link href="/admin" className="btn sea" style={{ display: 'block', textAlign: 'center', marginTop: 14 }}>Administration</Link>}
 
       <h2 style={{ marginTop: 22 }}>{t('myListings')}</h2>

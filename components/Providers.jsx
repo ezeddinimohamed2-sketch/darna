@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { T } from '../lib/i18n';
 import Icon from './Icons';
+import { supabase } from '../lib/supabase';
+import { useSession } from '../lib/useSession';
 
 const Ctx = createContext(null);
 export const useApp = () => useContext(Ctx);
@@ -12,6 +14,12 @@ export default function Providers({ children }) {
   const [lang, setLangState] = useState('fr');
   const [toast, setToast] = useState('');
   const path = usePathname();
+  const session = useSession();
+  const [crmOn, setCrmOn] = useState(false);
+  useEffect(() => {
+    if (!session) return setCrmOn(false);
+    supabase.from('profiles').select('crm_enabled').eq('id', session.user.id).maybeSingle().then(({ data }) => setCrmOn(!!data?.crm_enabled));
+  }, [session]);
 
   useEffect(() => {
     try {
@@ -40,7 +48,7 @@ export default function Providers({ children }) {
   const nav = [
     ['/', 'nav_search', 'home'],
     ['/publier', 'nav_publish', 'plus'],
-    ['/crm', 'nav_pro', 'briefcase'],
+    ...(crmOn || path.startsWith('/crm') ? [['/crm', 'nav_pro', 'briefcase']] : []),
     ['/compte', 'nav_account', 'user'],
   ];
   const active = (h) => (h === '/' ? path === '/' : path.startsWith(h));
