@@ -1,11 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useApp } from '../Providers';
+import { useCrm } from './CrmContext';
 import { Sheet, Field, Seg, Num, useGeo, useClients, ClientSelect, clean } from './ui';
 import {
   KIND_CLIENT, TX_LABEL, TYPE_LABEL, DEED_LABEL, MANDATE_LABEL, STATUS_BIEN, STAGES, VISIT_STATUS, REQ_STATUS,
-  HOUSING, autoTitle, toLocalInput, fromLocalInput, logActivity, suggestCommission, money,
+  HOUSING, uploadPropertyPhotos, autoTitle, toLocalInput, fromLocalInput, logActivity, suggestCommission, money,
 } from '../../lib/crm';
 
 const num = (v) => (v ? +v : null);
@@ -60,6 +61,13 @@ export function PropertyForm({ initial, onClose, onSaved }) {
   const [busy, setBusy] = useState(false);
   const [qc, setQc] = useState(null);
   const sale = f.transaction === 'vente';
+  const { uid } = useCrm();
+  const fileRef = useRef();
+  const [pics, setPics] = useState([]);
+  const pickPics = (files) => {
+    const add = [...files].filter((x) => x.type.startsWith('image/')).map((file) => ({ file, url: URL.createObjectURL(file) }));
+    setPics((a) => [...a, ...add].slice(0, 12));
+  };
 
   const addOwner = async () => {
     if ((qc.name || '').trim().length < 2) return say('Nom du propriétaire ?');
@@ -92,8 +100,12 @@ export function PropertyForm({ initial, onClose, onSaved }) {
     });
     const q = f.id ? supabase.from('crm_properties').update(row).eq('id', f.id).select('id').single() : supabase.from('crm_properties').insert(row).select('id').single();
     const { data, error } = await q;
+    if (error) { setBusy(false); return say(error.message); }
+    if (!f.id && pics.length) {
+      const err = await uploadPropertyPhotos(uid, data.id, pics.map((x) => x.file), 0);
+      if (err) say('Bien créé, mais photos : ' + err);
+    }
     setBusy(false);
-    if (error) return say(error.message);
     say(f.listing_id ? 'Bien enregistré — pensez à mettre à jour l’annonce DarNa' : 'Bien enregistré');
     onSaved(data.id);
   };
@@ -207,6 +219,23 @@ export function PropertyForm({ initial, onClose, onSaved }) {
         <Field label="ou montant fixe (DT)"><Num value={f.commission_fixed} onChange={(v) => set({ commission_fixed: v })} /></Field>
       </div>
 
+      {!f.id && (
+        <Field label={`Photos (${pics.length}/12)`}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {pics.map((x, i) => (
+              <div key={x.url} style={{ position: 'relative', width: 76, height: 76 }}>
+                <img src={x.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+                <button type="button" aria-label="Retirer" onClick={() => setPics((a) => a.filter((_, j) => j !== i))}
+                  style={{ position: 'absolute', top: -6, right: -6, width: 22, height: 22, borderRadius: 11, border: 0, background: '#E41E3F', color: '#fff', fontWeight: 700, lineHeight: '22px', padding: 0 }}>×</button>
+              </div>
+            ))}
+            {pics.length < 12 && (
+              <button type="button" className="btn" style={{ width: 76, height: 76 }} onClick={() => fileRef.current?.click()}>+ Photo</button>
+            )}
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={(e) => { pickPics(e.target.files); e.target.value = ''; }} />
+        </Field>
+      )}
       <Field label="Description publique (visible sur l’annonce)"><textarea value={f.description || ''} onChange={(e) => set({ description: e.target.value })} /></Field>
       <Field label="Notes privées (jamais publiées)"><textarea value={f.private_notes || ''} onChange={(e) => set({ private_notes: e.target.value })} /></Field>
       <button className="btn primary" style={{ marginTop: 16 }} disabled={busy} onClick={save}>{busy ? '…' : 'Enregistrer'}</button>
