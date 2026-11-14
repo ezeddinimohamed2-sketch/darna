@@ -28,7 +28,7 @@ export default function DemandeDetail() {
     setProps(b.data || []);
     const req = a.data;
     if (req && req.status === 'active') {
-      // annonces publiques de DarNa qui correspondent (hors biens du CRM)
+      // annonces publiques de Amlek qui correspondent (hors biens du CRM)
       let q = supabase.from('listings').select('id,title,transaction,price_dt,price_on_request,rent_period,surface_total_m2,rooms,owner_id,delegation:delegations(name_fr)').eq('status', 'publiee').eq('transaction', req.transaction).limit(12).order('published_at', { ascending: false });
       if (req.property_types?.length) q = q.in('property', req.property_types);
       if (req.governorate_id) q = q.eq('governorate_id', req.governorate_id);
@@ -110,7 +110,7 @@ export default function DemandeDetail() {
       </section>
 
       <section className="panel">
-        <h3>Annonces DarNa qui correspondent ({pubOnly.length})</h3>
+        <h3>Annonces Amlek qui correspondent ({pubOnly.length})</h3>
         {r.status === 'active' && pubOnly.length === 0 && <Empty>Aucune annonce publique ne correspond.</Empty>}
         {pubOnly.map((l) => (
           <div className="li" key={l.id} style={{ marginTop: 6 }}>

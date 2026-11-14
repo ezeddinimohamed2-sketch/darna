@@ -1,7 +1,7 @@
 export default function manifest() {
   return {
-    name: 'DarNa — Annonces immobilières en Tunisie',
-    short_name: 'DarNa',
+    name: 'Amlek — Annonces immobilières en Tunisie',
+    short_name: 'Amlek',
     description: 'Acheter, louer, vendre un bien en Tunisie.',
     start_url: '/',
     display: 'standalone',

@@ -23,7 +23,7 @@ export function buildCaption(p, place, phone, url) {
     `👉 Toutes les photos et détails : ${url}`,
   ].filter((x, i, a) => x !== '' || (a[i - 1] !== '' && i > 0));
   const tags = [
-    '#immobilier', '#tunisie', '#darna',
+    '#immobilier', '#tunisie', '#amlek',
     p.transaction === 'vente' ? '#avendre' : '#alouer',
     tag(TYPE_LABEL[p.property]),
     ...place.split(',').map((x) => tag(x.trim())),
@@ -149,7 +149,7 @@ export default function SharePanel({ p, place, photos, phone }) {
         <button className="btn" disabled={busy || !photos.length} onClick={download}>Télécharger les photos</button>
         <button className="btn" onClick={() => setCaption(initial)}>Réinitialiser</button>
       </div>
-      <p className="cmeta" style={{ marginBottom: 0 }}>Facebook affiche automatiquement la photo, le titre et le prix du lien DarNa. Instagram n’accepte pas de lien cliquable dans une publication : mettez-le dans votre bio.</p>
+      <p className="cmeta" style={{ marginBottom: 0 }}>Facebook affiche automatiquement la photo, le titre et le prix du lien Amlek. Instagram n’accepte pas de lien cliquable dans une publication : mettez-le dans votre bio.</p>
     </section>
   );
 }

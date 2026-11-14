@@ -59,7 +59,7 @@ export default function Admin() {
 
   return (
     <>
-      <h2>Accès DarNa Pro (CRM) — {agents.filter((a) => a.crm_requested).length} demande(s)</h2>
+      <h2>Accès Amlek Pro (CRM) — {agents.filter((a) => a.crm_requested).length} demande(s)</h2>
       {agents.map((a) => (
         <div className="mine" key={a.id}>
           <b>{a.agency_name || a.display_name || 'Sans nom'}</b>{' '}

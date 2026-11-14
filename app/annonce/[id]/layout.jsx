@@ -6,7 +6,7 @@ const fmt = (n) => new Intl.NumberFormat('fr-FR').format(n).replace(/[  ]/g, 
 
 // Aperçu riche quand le lien est partagé (Facebook, Instagram, WhatsApp, Messenger…)
 export async function generateMetadata({ params }) {
-  const fallback = { title: 'Annonce — DarNa', description: "Annonces immobilières en Tunisie." };
+  const fallback = { title: 'Annonce — Amlek', description: "Annonces immobilières en Tunisie." };
   try {
     const sel = 'title,transaction,price_dt,price_on_request,rent_period,surface_total_m2,rooms,delegation:delegations(name_fr),governorate:governorates(name_fr),listing_photos(storage_path,position)';
     const res = await fetch(`${base}/rest/v1/listings?id=eq.${encodeURIComponent(params.id)}&status=eq.publiee&select=${encodeURIComponent(sel)}`, {
@@ -25,10 +25,10 @@ export async function generateMetadata({ params }) {
     const image = photo ? `${base}/storage/v1/object/public/listing-photos/${photo.storage_path}` : `${SITE_URL}/logo.png`;
     const url = `${SITE_URL}/annonce/${params.id}`;
     return {
-      title: `${l.title} — DarNa`,
+      title: `${l.title} — Amlek`,
       description,
       alternates: { canonical: url },
-      openGraph: { type: 'website', siteName: 'DarNa', title: l.title, description, url, images: [{ url: image }], locale: 'fr_TN' },
+      openGraph: { type: 'website', siteName: 'Amlek', title: l.title, description, url, images: [{ url: image }], locale: 'fr_TN' },
       twitter: { card: 'summary_large_image', title: l.title, description, images: [image] },
     };
   } catch (e) {

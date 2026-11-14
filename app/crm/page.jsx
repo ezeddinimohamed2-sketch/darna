@@ -49,7 +49,7 @@ export default function Dashboard() {
       </div>
 
       <div className="stats">
-        <Link href="/crm/biens" className="stat"><b>{activeProps.length}</b><span>Biens actifs · {online} en ligne sur DarNa</span></Link>
+        <Link href="/crm/biens" className="stat"><b>{activeProps.length}</b><span>Biens actifs · {online} en ligne sur Amlek</span></Link>
         <Link href="/crm/demandes" className="stat"><b>{d.reqs.length}</b><span>Demandes actives</span></Link>
         <Link href="/crm/visites" className="stat"><b>{weekVisits.length}</b><span>Visites cette semaine</span></Link>
         <Link href="/crm/affaires" className="stat"><b>{openDeals.length}</b><span>Affaires en cours · {money(pipeline)}</span></Link>

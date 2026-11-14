@@ -91,12 +91,12 @@ export default function BienDetail() {
     const res = await publishProperty(uid, p, photos);
     setBusy(false);
     if (res.error) return say(res.error);
-    await logActivity({ kind: 'note', body: p.listing_id ? 'Annonce DarNa mise à jour' : 'Publié sur DarNa', property_id: id });
-    say(p.listing_id ? 'Annonce mise à jour' : 'Publié sur DarNa ✓');
+    await logActivity({ kind: 'note', body: p.listing_id ? 'Annonce Amlek mise à jour' : 'Publié sur Amlek', property_id: id });
+    say(p.listing_id ? 'Annonce mise à jour' : 'Publié sur Amlek ✓');
     load();
   };
   const withdraw = async () => {
-    if (!confirm('Retirer l’annonce de DarNa ? Le bien reste dans votre CRM.')) return;
+    if (!confirm('Retirer l’annonce de Amlek ? Le bien reste dans votre CRM.')) return;
     const res = await withdrawProperty(p);
     if (res.error) return say(res.error);
     say('Annonce retirée');
@@ -141,17 +141,17 @@ export default function BienDetail() {
       </section>
 
       <section className="panel">
-        <h3>Publication sur DarNa</h3>
+        <h3>Publication sur Amlek</h3>
         {p.listing_id ? (
-          <p className="ok-box">Ce bien est relié à une annonce DarNa. {ACTIVE_BIEN.includes(p.status) ? '' : 'Pensez à la retirer si le bien n’est plus disponible.'}</p>
+          <p className="ok-box">Ce bien est relié à une annonce Amlek. {ACTIVE_BIEN.includes(p.status) ? '' : 'Pensez à la retirer si le bien n’est plus disponible.'}</p>
         ) : (
           <p className="cmeta" style={{ marginTop: 0 }}>Publiez ce bien sur le site d’annonces en un geste. Les notes privées, l’adresse exacte, le mandat et la commission ne sont jamais publiés.</p>
         )}
         {problems.length > 0 && <div className="warn-box" style={{ marginBottom: 8 }}>{problems.map((x) => <div key={x}>• {x}</div>)}</div>}
         <div className="row">
-          <button className="btn primary" style={{ width: 'auto' }} disabled={busy} onClick={publish}>{busy ? '…' : p.listing_id ? 'Mettre à jour l’annonce' : 'Publier sur DarNa'}</button>
+          <button className="btn primary" style={{ width: 'auto' }} disabled={busy} onClick={publish}>{busy ? '…' : p.listing_id ? 'Mettre à jour l’annonce' : 'Publier sur Amlek'}</button>
           {p.listing_id && <Link className="btn" href={`/annonce/${p.listing_id}`}>Voir l’annonce</Link>}
-          {p.listing_id && <button className="btn" onClick={withdraw}>Retirer de DarNa</button>}
+          {p.listing_id && <button className="btn" onClick={withdraw}>Retirer de Amlek</button>}
         </div>
       </section>
 

@@ -25,7 +25,7 @@ export default function Affaires() {
     const i = ORDER.indexOf(d.stage) + dir;
     if (i < 0 || i >= ORDER.length) return;
     const stage = ORDER[i];
-    if (stage === 'conclu' && !confirm(`Conclure l’affaire ? Le bien sera marqué ${d.property?.transaction === 'vente' ? 'vendu' : 'loué'} et son annonce DarNa retirée.`)) return;
+    if (stage === 'conclu' && !confirm(`Conclure l’affaire ? Le bien sera marqué ${d.property?.transaction === 'vente' ? 'vendu' : 'loué'} et son annonce Amlek retirée.`)) return;
     const extra = {};
     if (stage === 'conclu' && d.commission_dt == null) {
       const c = suggestCommission(d.property, d.amount_dt);

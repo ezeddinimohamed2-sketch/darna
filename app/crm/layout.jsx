@@ -35,7 +35,7 @@ export default function CrmLayout({ children }) {
   if (!session) {
     return (
       <div className="box" style={{ padding: 16 }}>
-        <h2>DarNa Pro — le CRM des agents immobiliers</h2>
+        <h2>Amlek Pro — le CRM des agents immobiliers</h2>
         <p className="cmeta">Connectez-vous pour accéder à votre espace professionnel.</p>
         <AuthForm />
       </div>
@@ -49,9 +49,9 @@ export default function CrmLayout({ children }) {
     };
     return (
       <div className="box" style={{ padding: 16 }}>
-        <h2>DarNa Pro — le CRM des agents immobiliers</h2>
-        <p>Gérez vos biens, vos clients, vos demandes, vos visites et vos affaires au même endroit, et publiez vos biens sur DarNa en un geste.</p>
-        <p className="cmeta">L’accès est réservé aux agences et agents validés par DarNa.</p>
+        <h2>Amlek Pro — le CRM des agents immobiliers</h2>
+        <p>Gérez vos biens, vos clients, vos demandes, vos visites et vos affaires au même endroit, et publiez vos biens sur Amlek en un geste.</p>
+        <p className="cmeta">L’accès est réservé aux agences et agents validés par Amlek.</p>
         {prof.crm_requested
           ? <p className="ok-box">Votre demande est enregistrée. Nous vous activons l’accès très bientôt.</p>
           : <button className="btn primary" onClick={ask}>Demander l’accès</button>}

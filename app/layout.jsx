@@ -5,9 +5,9 @@ import { SITE_URL } from '../lib/site';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  openGraph: { type: 'website', siteName: 'DarNa', title: 'DarNa — Annonces immobilières en Tunisie', description: 'Acheter, louer, vendre un bien en Tunisie.', images: [{ url: '/logo.png' }], locale: 'fr_TN' },
-  title: 'DarNa — Annonces immobilières en Tunisie',
-  appleWebApp: { capable: true, title: 'DarNa', statusBarStyle: 'default' },
+  openGraph: { type: 'website', siteName: 'Amlek', title: 'Amlek — Annonces immobilières en Tunisie', description: 'Acheter, louer, vendre un bien en Tunisie.', images: [{ url: '/logo.png' }], locale: 'fr_TN' },
+  title: 'Amlek — Annonces immobilières en Tunisie',
+  appleWebApp: { capable: true, title: 'Amlek', statusBarStyle: 'default' },
   description: "Acheter, louer, vendre un bien en Tunisie : appartements, villas, terrains. Publiez en 1 minute, sans rien taper.",
 };
 export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#ffffff' };

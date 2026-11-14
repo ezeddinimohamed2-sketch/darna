@@ -42,7 +42,7 @@ export function ClientForm({ initial, onClose, onSaved }) {
       <Field label="E-mail"><input type="email" value={f.email || ''} onChange={(e) => set({ email: e.target.value })} /></Field>
       <Field label="Type de client"><Seg value={f.kind} onChange={(v) => set({ kind: v })} options={Object.entries(KIND_CLIENT)} /></Field>
       <div className="g2">
-        <Field label="Source"><input type="text" placeholder="DarNa, bouche-à-oreille, Facebook…" value={f.source || ''} onChange={(e) => set({ source: e.target.value })} /></Field>
+        <Field label="Source"><input type="text" placeholder="Amlek, bouche-à-oreille, Facebook…" value={f.source || ''} onChange={(e) => set({ source: e.target.value })} /></Field>
         <Field label="Étiquettes (séparées par des virgules)"><input type="text" placeholder="VIP, investisseur…" value={f.tagsText} onChange={(e) => set({ tagsText: e.target.value })} /></Field>
       </div>
       <Field label="Notes"><textarea value={f.notes || ''} onChange={(e) => set({ notes: e.target.value })} /></Field>
@@ -106,7 +106,7 @@ export function PropertyForm({ initial, onClose, onSaved }) {
       if (err) say('Bien créé, mais photos : ' + err);
     }
     setBusy(false);
-    say(f.listing_id ? 'Bien enregistré — pensez à mettre à jour l’annonce DarNa' : 'Bien enregistré');
+    say(f.listing_id ? 'Bien enregistré — pensez à mettre à jour l’annonce Amlek' : 'Bien enregistré');
     onSaved(data.id);
   };
 
